@@ -9,11 +9,11 @@ using SunnyWeatherApp.Models;
 namespace SunnyWeatherApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class NewItemPage : ContentPage
+    public partial class SearchLocationListPage : ContentPage
     {
         public Item Item { get; set; }
 
-        public NewItemPage()
+        public SearchLocationListPage()
         {
             InitializeComponent();
 

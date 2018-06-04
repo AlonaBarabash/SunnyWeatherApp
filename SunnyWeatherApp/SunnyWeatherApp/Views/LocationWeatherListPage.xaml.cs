@@ -14,32 +14,20 @@ using SunnyWeatherApp.ViewModels;
 namespace SunnyWeatherApp.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class ItemsPage : ContentPage
+	public partial class LocationWeatherListPage : ContentPage
 	{
         ItemsViewModel viewModel;
 
-        public ItemsPage()
+        public LocationWeatherListPage()
         {
             InitializeComponent();
 
             BindingContext = viewModel = new ItemsViewModel();
         }
 
-        async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
-        {
-            var item = args.SelectedItem as Item;
-            if (item == null)
-                return;
-
-            await Navigation.PushAsync(new ItemDetailPage(new ItemDetailViewModel(item)));
-
-            // Manually deselect item.
-            ItemsListView.SelectedItem = null;
-        }
-
         async void AddItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
+            await Navigation.PushModalAsync(new NavigationPage(new SearchLocationListPage()));
         }
 
         protected override void OnAppearing()
