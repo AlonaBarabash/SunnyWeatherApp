@@ -22,27 +22,55 @@ namespace SunnyWeatherApp.ViewModels
         {
             _weatherService = weatherService;
             _locationSearchServiceService = locationSearchServiceService;
-            Title = "Browse weather";
+            Title = "Browse Weather";
             LocationWeatherList = new ObservableCollection<LocationWeather>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            LoadItemsCommand = new Command(async () => await ExecuteLoadLocationListFromDataStoreCommandAsync());
 
-            MessagingCenter.Subscribe<SearchLocationListPage, Location>(this, "AddItem", async (obj, item) =>
+            RemoveItemCommand = new Command<string>(async (key) => await ExecuteRemoveItemFromDataStoreCommandAsync(key));
+
+            MessagingCenter.Subscribe<SearchLocationListPage, Location>(this, "AddItem", async (obj, location) =>
             {
+                var weatherList = await _weatherService.GetCurrentWeatherByLocationAsync(location.Key);
+                var locationWeather = new LocationWeather
+                {
+                    Location = location,
+                    CurrentWeather = weatherList.FirstOrDefault()
+                };
+                if (!LocationWeatherList.Contains(locationWeather))
+                {
+                    LocationWeatherList.Add(locationWeather);
+                }
+                await _locationSearchServiceService.AddItemAsync(location);
+            });
+        }
+        public ObservableCollection<LocationWeather> LocationWeatherList { get; set; }
+        public Command LoadItemsCommand { get; set; }
+        public ICommand RemoveItemCommand { get; set; }
+        async Task ExecuteRemoveItemFromDataStoreCommandAsync(string key)
+        {
+            await ExecuteCommandAsync(async () =>
+            {
+                await _locationSearchServiceService.DeleteItemAsync(key);
+                LocationWeatherList.Clear();
+                var locationList = await _locationSearchServiceService.GetItemListAsync(true);
 
+                foreach (var location in locationList)
+                {
+                    var weatherList = await _weatherService.GetCurrentWeatherByLocationAsync(location.Key);
+                    var locationWeather = new LocationWeather
+                    {
+                        Location = location,
+                        CurrentWeather = weatherList.FirstOrDefault()
+                    };
 
+                    LocationWeatherList.Add(locationWeather);
+                }
             });
         }
 
-        public Command LoadItemsCommand { get; set; }
-        public ObservableCollection<LocationWeather> LocationWeatherList { get; set; }
-        async Task ExecuteLoadItemsCommand()
+        async Task ExecuteLoadLocationListFromDataStoreCommandAsync()
         {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-
-            try
+            await ExecuteCommandAsync(async () =>
             {
                 LocationWeatherList.Clear();
                 var locationList = await _locationSearchServiceService.GetItemListAsync(true);
@@ -57,15 +85,7 @@ namespace SunnyWeatherApp.ViewModels
 
                     LocationWeatherList.Add(locationWeather);
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            });
         }
     }
 }

@@ -30,31 +30,21 @@ namespace SunnyWeatherApp.ViewModels
             get => _searchedText;
             set => SetProperty(ref _searchedText, value);
         }
-
         private async Task ExecuteSearchLocationListCommandAsync()
         {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-            try
+            await ExecuteCommandAsync(async () =>
             {
-
                 LocationList.Clear();
                 var locationList = await _locationSearchServiceService.GetLocationListByTextAsync(SearchedText);
                 foreach (var location in locationList)
                 {
                     LocationList.Add(location);
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+
+                ErrorMessage = string.Empty;
+                IsErrorMessageVisible = false;
+                IsListVisible = true;
+            });
         }
     }
 }

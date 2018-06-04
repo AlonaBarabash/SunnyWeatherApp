@@ -31,11 +31,11 @@ namespace SunnyWeatherApp.Views
 
         void RemoveLocation_Clicked(object sender, EventArgs e)
         {
-            //TODO
-
-
-
-
+            if (ItemsListView.ItemsSource is IList<LocationWeather> selectedItem)
+            {
+                viewModel.RemoveItemCommand.Execute(selectedItem[0].Location.Key);
+            }
+            ItemsListView.SelectedItem = null;
         }
 
         protected override void OnAppearing()
