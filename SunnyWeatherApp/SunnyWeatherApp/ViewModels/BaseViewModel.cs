@@ -82,6 +82,7 @@ namespace SunnyWeatherApp.ViewModels
         }
         private void HandleException(ApiException e)
         {
+            string space = " ";
             ErrorMessage = "Some error has been occured.";
             IsErrorMessageVisible = true;
             IsListVisible = false;
@@ -89,7 +90,7 @@ namespace SunnyWeatherApp.ViewModels
             var serverError = e.ServerErrorResponse;
             if (serverError != null)
             {
-                ErrorMessage = $"{serverError.Code} {serverError.Message}";
+                ErrorMessage = $"{serverError.Code}{space}{serverError.Message}";
             }
 
             Debug.WriteLine(e);

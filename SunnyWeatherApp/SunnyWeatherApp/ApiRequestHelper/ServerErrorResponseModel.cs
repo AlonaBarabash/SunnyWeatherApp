@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SunnyWeatherApp.ApiRequestHelper
 {
-    class ServerErrorResponseModel
+    public class ServerErrorResponseModel
     {
         public string Code { get; set; }
         public string Message { get; set; }
