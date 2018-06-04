@@ -19,11 +19,11 @@ namespace SunnyWeatherApp.ViewModels
             _locationSearchServiceService = locationSearchService;
             Title = "Browse";
             LocationList = new ObservableCollection<Location>();
-            LoadItemsCommand = new Command(async () => await ExecuteSearchLocationListCommandAsync());
+            SearchLocationCommand = new Command(async () => await ExecuteSearchLocationListCommandAsync());
         }
 
         public ObservableCollection<Location> LocationList { get; set; }
-        public Command LoadItemsCommand { get; set; }
+        public Command SearchLocationCommand { get; set; }
 
         public string SearchedText
         {

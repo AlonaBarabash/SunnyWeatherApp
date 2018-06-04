@@ -15,7 +15,7 @@ namespace SunnyWeatherApp.Tests
     [TestFixture]
     public class SearchLocationListViewModelTests
     {
-        private readonly Location _location = new Location
+        private readonly Location _locationKyiv = new Location
         {
             Key = "324505",
             LocalizedName = "Kyiv",
@@ -31,7 +31,7 @@ namespace SunnyWeatherApp.Tests
                 LocalizedName = ""
             }
         };
-        private readonly Location _location2 = new Location
+        private readonly Location _locationLviv = new Location
         {
             Key = "324561",
             LocalizedName = "Lviv",
@@ -49,13 +49,7 @@ namespace SunnyWeatherApp.Tests
         };
 
         private readonly Mock<ILocationSearchService> _locationSearchServiceMoc = new Mock<ILocationSearchService>();
-
-        [SetUp]
-        public void SetUpMocks()
-        {
-            //TODO or delete
-        }
-
+        
         [Test]
         public void LoadItemsCommand_ServiceReternLocationObject_AddReternedByServiceLocationObjectToLocationList()
         {
@@ -64,16 +58,16 @@ namespace SunnyWeatherApp.Tests
                 .Setup(service => service.GetLocationListByTextAsync(It.IsAny<string>()))
                 .ReturnsAsync(new List<Location>
                 {
-                    _location
+                    _locationKyiv
                 });
             var searchLocationListViewModel = new SearchLocationListViewModel(_locationSearchServiceMoc.Object);
 
             //Act
-            searchLocationListViewModel.LoadItemsCommand.Execute(null);
+            searchLocationListViewModel.SearchLocationCommand.Execute(null);
             var locationListResult = searchLocationListViewModel.LocationList;
 
             //Assert
-            Assert.AreEqual(_location, locationListResult.FirstOrDefault());
+            Assert.AreEqual(_locationKyiv, locationListResult.FirstOrDefault());
         }
 
         [Test]
@@ -89,7 +83,7 @@ namespace SunnyWeatherApp.Tests
             var searchLocationListViewModel = new SearchLocationListViewModel(_locationSearchServiceMoc.Object);
 
             //Act
-            searchLocationListViewModel.LoadItemsCommand.Execute(null);
+            searchLocationListViewModel.SearchLocationCommand.Execute(null);
         }
 
         [Test]
@@ -105,7 +99,7 @@ namespace SunnyWeatherApp.Tests
             var searchLocationListViewModel = new SearchLocationListViewModel(_locationSearchServiceMoc.Object);
 
             //Act
-            searchLocationListViewModel.LoadItemsCommand.Execute(null);
+            searchLocationListViewModel.SearchLocationCommand.Execute(null);
 
             //Assert
             Assert.AreEqual($"{space}{textOfException}", searchLocationListViewModel.ErrorMessage);
@@ -135,7 +129,7 @@ namespace SunnyWeatherApp.Tests
             var searchLocationListViewModel = new SearchLocationListViewModel(_locationSearchServiceMoc.Object);
 
             //Act
-            searchLocationListViewModel.LoadItemsCommand.Execute(null);
+            searchLocationListViewModel.SearchLocationCommand.Execute(null);
 
             //Assert
             Assert.AreEqual($"{serverErrorResponse.Code}{space}{serverErrorResponse.Message}", searchLocationListViewModel.ErrorMessage);
@@ -148,8 +142,8 @@ namespace SunnyWeatherApp.Tests
             //Arrange
             var locationList = new List<Location>
             {
-                _location,
-                _location2
+                _locationKyiv,
+                _locationLviv
             };
             _locationSearchServiceMoc
                 .Setup(service => service.GetLocationListByTextAsync(It.IsAny<string>()))
@@ -157,7 +151,7 @@ namespace SunnyWeatherApp.Tests
             var searchLocationListViewModel = new SearchLocationListViewModel(_locationSearchServiceMoc.Object);
 
             //Act
-            searchLocationListViewModel.LoadItemsCommand.Execute(null);
+            searchLocationListViewModel.SearchLocationCommand.Execute(null);
             var locationListResult = searchLocationListViewModel.LocationList;
 
             //Assert

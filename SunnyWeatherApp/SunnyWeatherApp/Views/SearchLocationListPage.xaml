@@ -14,7 +14,7 @@
     </ContentPage.ToolbarItems>
     <StackLayout Spacing="20" Padding="15">
         <SearchBar x:Name="LocationSearchByText"
-                   SearchCommand="{Binding LoadItemsCommand}"
+                   SearchCommand="{Binding SearchLocationCommand}"
                    Text="{Binding SearchedText, Mode=TwoWay}" />
 
         <Label Text="{Binding ErrorMessage}" IsVisible="{Binding IsErrorMessageVisible}"/>
@@ -23,7 +23,7 @@
                   ItemsSource="{Binding LocationList}"
                   VerticalOptions="FillAndExpand"
                   HasUnevenRows="true"
-                  RefreshCommand="{Binding LoadItemsCommand}"
+                  RefreshCommand="{Binding SearchLocationCommand}"
                   IsPullToRefreshEnabled="true"
                   IsVisible="{Binding IsListVisible}"
                   IsRefreshing="{Binding IsBusy, Mode=OneWay}"
