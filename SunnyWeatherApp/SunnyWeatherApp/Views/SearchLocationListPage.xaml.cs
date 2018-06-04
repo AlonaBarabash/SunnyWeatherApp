@@ -1,35 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-
+using Autofac;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
-using SunnyWeatherApp.Models;
+using SunnyWeatherApp.Models.Location;
+using SunnyWeatherApp.ViewModels;
 
 namespace SunnyWeatherApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SearchLocationListPage : ContentPage
     {
-        public Item Item { get; set; }
+        private SearchLocationListViewModel _viewModel;
 
         public SearchLocationListPage()
         {
             InitializeComponent();
-
-            Item = new Item
-            {
-                Text = "Item name",
-                Description = "This is an item description."
-            };
-
-            BindingContext = this;
+            BindingContext = _viewModel = App.Container.Resolve<SearchLocationListViewModel>();
         }
-
-        async void Save_Clicked(object sender, EventArgs e)
+        async void OnItemSelected_AddItem(object sender, SelectedItemChangedEventArgs args)
         {
-            MessagingCenter.Send(this, "AddItem", Item);
+            var location = args.SelectedItem as Location;
+            if (location == null)
+                return;
+
+            MessagingCenter.Send(this, "AddItem", location);
             await Navigation.PopModalAsync();
         }
+        async void ReturnItem_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PopModalAsync();
+        }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            LocationSearchByText.Focus();
+        }
+
     }
 }
