@@ -31,6 +31,22 @@ namespace SunnyWeatherApp.Tests
                 LocalizedName = ""
             }
         };
+        private readonly Location _location2 = new Location
+        {
+            Key = "324561",
+            LocalizedName = "Lviv",
+            Type = "City",
+            AdministrativeArea = new AdministrativeArea()
+            {
+                LocalizedName = "",
+                LocalizedType = ""
+            },
+            Country = new Country()
+            {
+                ID = "",
+                LocalizedName = ""
+            }
+        };
 
         private readonly Mock<ILocationSearchService> _locationSearchServiceMoc = new Mock<ILocationSearchService>();
 
@@ -125,6 +141,27 @@ namespace SunnyWeatherApp.Tests
             Assert.AreEqual($"{serverErrorResponse.Code}{space}{serverErrorResponse.Message}", searchLocationListViewModel.ErrorMessage);
             Assert.IsTrue(searchLocationListViewModel.IsErrorMessageVisible);
             Assert.IsFalse(searchLocationListViewModel.IsListVisible);
+        }
+        [Test]
+        public void LoadItemsCommand_ServiceReternLocationList_TheCorrectNumberOfLocationsIsReternedAfterSeveralRequests()
+        {
+            //Arrange
+            var locationList = new List<Location>
+            {
+                _location,
+                _location2
+            };
+            _locationSearchServiceMoc
+                .Setup(service => service.GetLocationListByTextAsync(It.IsAny<string>()))
+                .ReturnsAsync(locationList);
+            var searchLocationListViewModel = new SearchLocationListViewModel(_locationSearchServiceMoc.Object);
+
+            //Act
+            searchLocationListViewModel.LoadItemsCommand.Execute(null);
+            var locationListResult = searchLocationListViewModel.LocationList;
+
+            //Assert
+            Assert.AreEqual(locationList.Count, locationListResult.Count);
         }
     }
 }
