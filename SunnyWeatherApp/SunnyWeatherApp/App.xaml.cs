@@ -1,4 +1,6 @@
 ﻿using System;
+using Autofac;
+using SunnyWeatherApp.Infrastructure;
 using Xamarin.Forms;
 using SunnyWeatherApp.Views;
 using Xamarin.Forms.Xaml;
@@ -8,12 +10,17 @@ namespace SunnyWeatherApp
 {
 	public partial class App : Application
 	{
+	    public static IContainer Container { get; }
+        static App()
+	    {
+	        var builder = new ContainerBuilder();
+	        AutofacRegistrator.Register(builder);
+	        Container = builder.Build();
+        }
 		
 		public App ()
 		{
 			InitializeComponent();
-
-
 			MainPage = new MainPage();
 		}
 
