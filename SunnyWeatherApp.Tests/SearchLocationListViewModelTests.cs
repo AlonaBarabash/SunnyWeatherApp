@@ -51,7 +51,7 @@ namespace SunnyWeatherApp.Tests
         private readonly Mock<ILocationSearchService> _locationSearchServiceMoc = new Mock<ILocationSearchService>();
         
         [Test]
-        public void LoadItemsCommand_ServiceReternLocationObject_AddReternedByServiceLocationObjectToLocationList()
+        public void SearchLocationCommand_ServiceReternLocationObject_AddReternedByServiceLocationObjectToLocationList()
         {
             //Arrange
             _locationSearchServiceMoc
@@ -72,7 +72,7 @@ namespace SunnyWeatherApp.Tests
 
         [Test]
         [ExpectedException(typeof(ApiException))]
-        public void LoadItemsCommand_ServiceReternException_ApiException()
+        public void SearchLocationCommand_ServiceReternException_ApiException()
         {
             //Arrange
             string textOfException = "Text of exception";
@@ -87,7 +87,7 @@ namespace SunnyWeatherApp.Tests
         }
 
         [Test]
-        public void LoadItemsCommand_ServiceReternExceptionWithStringMessage_ReternErrorMessage()
+        public void SearchLocationCommand_ServiceReternExceptionWithStringMessage_ReternErrorMessage()
         {
             //Arrange
             string textOfException = "Text of exception";
@@ -112,7 +112,7 @@ namespace SunnyWeatherApp.Tests
         [TestCase("", "code")]
         [TestCase("message", "")]
         [TestCase("", "")]
-        public void LoadItemsCommand_ServiceReternExceptionWithServerErrorResponseModel_ReternErrorMessage(string message, string code)
+        public void SearchLocationCommand_ServiceReternExceptionWithServerErrorResponseModel_ReternErrorMessage(string message, string code)
         {
             //Arrange
             var serverErrorResponse = new ServerErrorResponseModel
@@ -137,7 +137,7 @@ namespace SunnyWeatherApp.Tests
             Assert.IsFalse(searchLocationListViewModel.IsListVisible);
         }
         [Test]
-        public void LoadItemsCommand_ServiceReternLocationList_TheCorrectNumberOfLocationsIsReternedAfterSeveralRequests()
+        public void SearchLocationCommand_ServiceReternLocationList_TheCorrectNumberOfLocationsIsReternedAfterSeveralRequests()
         {
             //Arrange
             var locationList = new List<Location>
