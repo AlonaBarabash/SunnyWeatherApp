@@ -15,9 +15,12 @@
     <StackLayout Spacing="20" Padding="15">
         <SearchBar x:Name="LocationSearchByText"
                    SearchCommand="{Binding SearchLocationCommand}"
-                   Text="{Binding SearchedText, Mode=TwoWay}" />
+                   Text="{Binding SearchedText, Mode=TwoWay}"
+                   AutomationId="LocationSearchByText"/>
 
-        <Label Text="{Binding ErrorMessage}" IsVisible="{Binding IsErrorMessageVisible}"/>
+        <Label Text="{Binding ErrorMessage}" 
+               IsVisible="{Binding IsErrorMessageVisible}"
+               AutomationId="ErrorMessage"/>
 
         <ListView x:Name="ItemsListView"
                   ItemsSource="{Binding LocationList}"
@@ -36,7 +39,8 @@
                             <Label Text="{Binding LocalizedName}"
                                    LineBreakMode="NoWrap"
                                    Style="{DynamicResource ListItemTextStyle}"
-                                   FontSize="16" />
+                                   FontSize="16" 
+                                   AutomationId="ResultLocalizedName"/>
                             <Label Text="{Binding Type}"
                                    LineBreakMode="NoWrap"
                                    Style="{DynamicResource ListItemDetailTextStyle}"

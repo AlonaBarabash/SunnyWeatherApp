@@ -46,7 +46,7 @@ namespace SunnyWeatherApp.ViewModels
                 await _locationSearchServiceService.AddLocationAsync(location);
             });
         }
-
+       
         public ObservableCollection<LocationWeather> LocationWeatherList { get; set; }
 
         public Command LoadItemsCommand { get; set; }
