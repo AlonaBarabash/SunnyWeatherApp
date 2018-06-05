@@ -36,56 +36,52 @@ namespace SunnyWeatherApp.ViewModels
                     Location = location,
                     CurrentWeather = weatherList.FirstOrDefault()
                 };
-                if (!LocationWeatherList.Contains(locationWeather))
+
+                var locationIsPresented = LocationWeatherList.Any(lw => lw?.Location?.Key == location.Key);
+                if (!locationIsPresented)
                 {
                     LocationWeatherList.Add(locationWeather);
                 }
-                await _locationSearchServiceService.AddItemAsync(location);
+
+                await _locationSearchServiceService.AddLocationAsync(location);
             });
         }
+
         public ObservableCollection<LocationWeather> LocationWeatherList { get; set; }
+
         public Command LoadItemsCommand { get; set; }
+
         public ICommand RemoveItemCommand { get; set; }
-        async Task ExecuteRemoveItemFromDataStoreCommandAsync(string key)
+
+        private async Task ExecuteRemoveItemFromDataStoreCommandAsync(string key)
         {
             await ExecuteCommandAsync(async () =>
             {
-                await _locationSearchServiceService.DeleteItemAsync(key);
-                LocationWeatherList.Clear();
-                var locationList = await _locationSearchServiceService.GetItemListAsync(true);
-
-                foreach (var location in locationList)
-                {
-                    var weatherList = await _weatherService.GetCurrentWeatherByLocationAsync(location.Key);
-                    var locationWeather = new LocationWeather
-                    {
-                        Location = location,
-                        CurrentWeather = weatherList.FirstOrDefault()
-                    };
-
-                    LocationWeatherList.Add(locationWeather);
-                }
+                await _locationSearchServiceService.DeleteLocationAsync(key);
+                await RefreshLocationWeatherList();
             });
         }
 
-        async Task ExecuteLoadLocationListFromDataStoreCommandAsync()
+        private async Task ExecuteLoadLocationListFromDataStoreCommandAsync()
         {
-            await ExecuteCommandAsync(async () =>
-            {
-                LocationWeatherList.Clear();
-                var locationList = await _locationSearchServiceService.GetItemListAsync(true);
-                foreach (var location in locationList)
-                {
-                    var weatherList = await _weatherService.GetCurrentWeatherByLocationAsync(location.Key);
-                    var locationWeather = new LocationWeather
-                    {
-                        Location = location,
-                        CurrentWeather = weatherList.FirstOrDefault()
-                    };
+            await ExecuteCommandAsync(async () => await RefreshLocationWeatherList());
+        }
 
-                    LocationWeatherList.Add(locationWeather);
-                }
-            });
+        private async Task RefreshLocationWeatherList()
+        {
+            LocationWeatherList.Clear();
+            var locationList = _locationSearchServiceService.GetLocationList();
+            foreach (var location in locationList)
+            {
+                var weatherList = await _weatherService.GetCurrentWeatherByLocationAsync(location.Key);
+                var locationWeather = new LocationWeather
+                {
+                    Location = location,
+                    CurrentWeather = weatherList.FirstOrDefault()
+                };
+
+                LocationWeatherList.Add(locationWeather);
+            }
         }
     }
 }
