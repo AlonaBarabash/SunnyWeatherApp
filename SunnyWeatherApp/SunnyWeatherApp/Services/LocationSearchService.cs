@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SunnyWeatherApp.Models.Location;
 using SunnyWeatherApp.Repositories;
@@ -15,7 +13,8 @@ namespace SunnyWeatherApp.Services
         private readonly IDataStore<Location> _locationDataStoreRepository;
 
 
-        public LocationSearchService(ILocationAccuWeatherRepository locationRepository, IDataStore<Location> locationDataStoreRepository)
+        public LocationSearchService(ILocationAccuWeatherRepository locationRepository,
+            IDataStore<Location> locationDataStoreRepository)
         {
             _locationRepository = locationRepository;
             _locationDataStoreRepository = locationDataStoreRepository;
@@ -26,24 +25,24 @@ namespace SunnyWeatherApp.Services
             return await _locationRepository.GetLocationListByTextAsync(searchText);
         }
 
-        public async Task<bool> AddItemAsync(Location location)
+        public async Task<bool> AddLocationAsync(Location location)
         {
-            return await _locationDataStoreRepository.AddItemAsync(location);
+            return await _locationDataStoreRepository.AddOrUpdateItemAsync(location);
         }
 
-        public async Task<bool> DeleteItemAsync(string key)
+        public async Task<bool> DeleteLocationAsync(string key)
         {
             return await _locationDataStoreRepository.DeleteItemAsync(key);
         }
 
-        public async Task<Location> GetItemAsync(string key)
+        public Location GetLocation(string key)
         {
-            return await _locationDataStoreRepository.GetItemAsync(key);
+            return _locationDataStoreRepository.GetItem(key);
         }
 
-        public async Task<IEnumerable<Location>> GetItemListAsync(bool forceRefresh = false)
+        public IEnumerable<Location> GetLocationList()
         {
-            return await _locationDataStoreRepository.GetItemListAsync();
+            return _locationDataStoreRepository.GetItemList();
         }
     }
 }

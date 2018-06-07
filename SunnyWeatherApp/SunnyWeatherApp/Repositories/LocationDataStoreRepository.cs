@@ -9,50 +9,41 @@ using Xamarin.Forms;
 
 namespace SunnyWeatherApp.Repositories
 {
-    class LocationDataStoreRepository : IDataStore<Location>
+   public class LocationDataStoreRepository : BaseDataStoreRepository<Location>, IDataStore<Location>
     {
-        private const string KeyPrefix = "location_key_";
+        protected override string ItemKeyPrefix => "location_key_";
 
-        private IEnumerable<Location> _locationList;
+        protected override Func<Location, string> KeyPredicate =>
+            location => location.Key;
 
-        public LocationDataStoreRepository()
+        public async Task<bool> AddOrUpdateItemAsync(Location location)
         {
-            _locationList = Application.Current.Properties
-                .Where(x => x.Key.Contains($"{KeyPrefix}"))
-                .Select(x => JsonConvert.DeserializeObject<Location>(x.Value.ToString()));
-        }
-
-        public async Task<bool> AddItemAsync(Location location)
-        {
-            if (Application.Current.Properties.Keys.Contains($"{KeyPrefix}{location.Key}"))
+            if (CheckIfExist(location))
             {
-                await DeleteItemAsync(location.Key);
+                await UpdateStorageAsync(location);
             }
-            Application.Current.Properties.Add($"{KeyPrefix}{location.Key}", JsonConvert.SerializeObject(location));
-            await Application.Current.SavePropertiesAsync();
+            else
+            {
+                await AddToStorageAsync(location);
+            }
+
             return true;
         }
 
         public async Task<bool> DeleteItemAsync(string key)
         {
-            Application.Current.Properties.Remove($"{KeyPrefix}{key}");
-            await Application.Current.SavePropertiesAsync();
-            await GetItemListAsync();
+            await DeleteFromStorageAsync(key);
             return true;
         }
 
-        public async Task<Location> GetItemAsync(string key)
+        public Location GetItem(string key)
         {
-            return await Task.FromResult(_locationList.FirstOrDefault(s => s.Key == key));
+            return GetItemFromStorage(key);
         }
 
-        public async Task<IEnumerable<Location>> GetItemListAsync(bool forceRefresh = false)
+        public IEnumerable<Location> GetItemList()
         {
-            _locationList = Application.Current.Properties
-                .Where(x => x.Key.Contains($"{KeyPrefix}"))
-                .Select(x => JsonConvert.DeserializeObject<Location>(x.Value.ToString()));
-
-            return await Task.FromResult(_locationList);
+            return GetItemListFromStorage();
         }
     }
 }

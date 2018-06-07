@@ -14,16 +14,19 @@
     </ContentPage.ToolbarItems>
     <StackLayout Spacing="20" Padding="15">
         <SearchBar x:Name="LocationSearchByText"
-                   SearchCommand="{Binding LoadItemsCommand}"
-                   Text="{Binding SearchedText, Mode=TwoWay}" />
+                   SearchCommand="{Binding SearchLocationCommand}"
+                   Text="{Binding SearchedText, Mode=TwoWay}"
+                   AutomationId="LocationSearchByText"/>
 
-        <Label Text="{Binding ErrorMessage}" IsVisible="{Binding IsErrorMessageVisible}"/>
+        <Label Text="{Binding ErrorMessage}" 
+               IsVisible="{Binding IsErrorMessageVisible}"
+               AutomationId="ErrorMessage"/>
 
         <ListView x:Name="ItemsListView"
                   ItemsSource="{Binding LocationList}"
                   VerticalOptions="FillAndExpand"
                   HasUnevenRows="true"
-                  RefreshCommand="{Binding LoadItemsCommand}"
+                  RefreshCommand="{Binding SearchLocationCommand}"
                   IsPullToRefreshEnabled="true"
                   IsVisible="{Binding IsListVisible}"
                   IsRefreshing="{Binding IsBusy, Mode=OneWay}"
@@ -36,7 +39,8 @@
                             <Label Text="{Binding LocalizedName}"
                                    LineBreakMode="NoWrap"
                                    Style="{DynamicResource ListItemTextStyle}"
-                                   FontSize="16" />
+                                   FontSize="16" 
+                                   AutomationId="ResultLocalizedName"/>
                             <Label Text="{Binding Type}"
                                    LineBreakMode="NoWrap"
                                    Style="{DynamicResource ListItemDetailTextStyle}"

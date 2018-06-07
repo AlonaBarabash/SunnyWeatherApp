@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SunnyWeatherApp.ApiRequestHelper
 {
-    class ApiException : System.Exception
+    public class ApiException : System.Exception
     {
         public ApiException()
         {
@@ -18,7 +18,11 @@ namespace SunnyWeatherApp.ApiRequestHelper
 
         public ApiException(string message)
         {
-            ServerErrorResponse.Message = message;
+            ServerErrorResponse = new ServerErrorResponseModel
+            {
+                Message = message,
+                Code = ""
+            };
         }
 
         public ServerErrorResponseModel ServerErrorResponse { get; }

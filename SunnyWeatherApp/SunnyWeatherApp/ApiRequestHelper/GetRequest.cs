@@ -68,6 +68,11 @@ namespace SunnyWeatherApp.ApiRequestHelper
                 throw new ApiException(serverErrorResponse);
             }
 
+            if (json == "[]")
+            {
+                throw new ApiException("Nothing found.");
+            }
+
             return JsonConvert.DeserializeObject<T>(json);
         }
     }

@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SunnyWeatherApp.Views.LocationWeatherListPage"
              Title="{Binding Title}"
-             x:Name="BrowseItemsPage">
+             x:Name="BrowseItemsPage"
+             AutomationId="RootElement">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Clicked="AddLocation_Clicked">
+        <ToolbarItem Text="Add" Clicked="AddLocation_Clicked" AutomationId="AddButton">
             <ToolbarItem.Icon>
                 <OnPlatform x:TypeArguments="FileImageSource">
                     <On Platform="UWP" Value="add.png" />
@@ -37,7 +38,8 @@
                                 <Label Text="{Binding Location.LocalizedName}"
                                        LineBreakMode="NoWrap"
                                        Style="{DynamicResource ListItemTextStyle}"
-                                       FontSize="16" />
+                                       FontSize="16"
+                                       AutomationId="LocalizedName"/>
                                 <Label Text="{Binding CurrentWeather.Temperature.ValueAndUnit}"
                                        LineBreakMode="NoWrap"
                                        Style="{DynamicResource ListItemDetailTextStyle}"

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using SunnyWeatherApp.Models.Location;
 
@@ -8,11 +6,15 @@ namespace SunnyWeatherApp.Services.Abstractions
 {
     public interface ILocationSearchService
     {
+        IEnumerable<Location> GetLocationList();
+
         Task<IList<Location>> GetLocationListByTextAsync(string searchText);
-        Task<bool> AddItemAsync(Location location);
-        Task<bool> DeleteItemAsync(string key);
-        Task<Location> GetItemAsync(string key);
-        Task<IEnumerable<Location>> GetItemListAsync(bool forceRefresh = false);
+
+        Location GetLocation(string key);
+
+        Task<bool> AddLocationAsync(Location location);
+
+        Task<bool> DeleteLocationAsync(string key);
     }
 }
 
