@@ -6,7 +6,7 @@
              x:Name="BrowseItemsPage"
              AutomationId="RootElement">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Clicked="AddLocation_Clicked" AutomationId="AddButton">
+        <ToolbarItem Text="Add" Clicked="AddLocation_Clicked">
             <ToolbarItem.Icon>
                 <OnPlatform x:TypeArguments="FileImageSource">
                     <On Platform="UWP" Value="add.png" />
@@ -23,6 +23,25 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout>
+            <Button Text="Add location"
+                    HorizontalOptions="EndAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    BackgroundColor="DarkTurquoise"
+                    Clicked="AddLocation_Clicked"
+                    AutomationId="AddButton"/>
+            <Button Text="Refresh weather"
+                    HorizontalOptions="EndAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    BackgroundColor="CornflowerBlue"
+                    Clicked="RefreshLocation_Clicked"
+                    AutomationId="RefreshButton"/>
+            <Button Text="Remove location"
+                    HorizontalOptions="EndAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    BackgroundColor="DarkSalmon"
+                    Clicked="RemoveLocation_Clicked"
+                    AutomationId="RemoveButton"/>
+
             <ListView x:Name="ItemsListView"
                       ItemsSource="{Binding LocationWeatherList}"
                       VerticalOptions="FillAndExpand"
@@ -44,12 +63,6 @@
                                        LineBreakMode="NoWrap"
                                        Style="{DynamicResource ListItemDetailTextStyle}"
                                        FontSize="16" />
-                                <Button Text="Remove location"
-                                        HorizontalOptions="EndAndExpand"
-                                        VerticalOptions="CenterAndExpand"
-                                        BackgroundColor="CornflowerBlue"
-                                        Clicked="RemoveLocation_Clicked"/>
-
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

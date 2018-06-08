@@ -31,9 +31,9 @@ namespace SunnyWeatherApp.Views
 
         void RemoveLocation_Clicked(object sender, EventArgs e)
         {
-            if (ItemsListView.ItemsSource is IList<LocationWeather> selectedItem)
+            if (ItemsListView.SelectedItem is LocationWeather selectedItem)
             {
-                viewModel.RemoveItemCommand.Execute(selectedItem[0].Location.Key);
+                viewModel.RemoveItemCommand.Execute(selectedItem.Location.Key);
             }
             ItemsListView.SelectedItem = null;
         }
