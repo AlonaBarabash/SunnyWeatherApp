@@ -1,18 +1,20 @@
-﻿using System;
+﻿using OpenQA.Selenium.Appium.Windows;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using OpenQA.Selenium.Appium.Windows;
 
 namespace SunnyWeatherApp.UITest.PageObjects
 {
     public class SearchLocationListPage : BasePage
     {
-        private WindowsElement LocationSearchByText => DriverSession.FindElementByAccessibilityId("LocationSearchByText");
+        private WindowsElement RootElement => DriverSession.FindElementByAccessibilityId("RootElement");
+        private WindowsElement LocationSearchByText => DriverSession.FindElementByAccessibilityId("QueryButton");
         private WindowsElement ErrorMessageLable => DriverSession.FindElementByAccessibilityId("ErrorMessage");
         private IReadOnlyCollection<WindowsElement> ResultLocalizedName => DriverSession.FindElementsByAccessibilityId("ResultLocalizedName");
-        
+
         public SearchLocationListPage(WindowsDriver<WindowsElement> driverSession) : base(driverSession)
         {
         }
@@ -22,7 +24,10 @@ namespace SunnyWeatherApp.UITest.PageObjects
             LocationSearchByText.SendKeys(valueToSearch);
             return this;
         }
-
+        public bool IsOppened()
+        {
+            return RootElement.Displayed;
+        }
         public SearchLocationListPage ClickSearchButton()
         {
             LocationSearchByText.Click();
@@ -31,10 +36,10 @@ namespace SunnyWeatherApp.UITest.PageObjects
 
         public IEnumerable<string> GetSearchResultLocationNames()
         {
-            WaitFoSearchApplied();
+            Thread.Sleep(3000);
             return ResultLocalizedName.Select(item => item.Text);
         }
-        
+
 
         private void WaitFoSearchApplied()
         {

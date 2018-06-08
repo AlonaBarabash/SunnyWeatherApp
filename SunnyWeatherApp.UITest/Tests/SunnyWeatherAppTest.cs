@@ -31,7 +31,7 @@ namespace SunnyWeatherApp.UITest.Tests
 
             DriverInstance = _windowsApplicationDriver.GetSessionWithRetry<WindowsElement>(appCapabilities, 10);
 
-            DriverInstance.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+            DriverInstance.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10)) ;
         }
 
         [TearDown]
@@ -48,15 +48,34 @@ namespace SunnyWeatherApp.UITest.Tests
 
 
         [Test]
-        public void SearchLoactionByLocationNameTest()
+        public void OpenListOfLocationsPage()
+        {
+            var locationWeatherListPage = new LocationWeatherListPage(DriverInstance);
+            Assert.IsTrue(locationWeatherListPage.IsOppened());            
+        }
+
+
+        [Test]
+        public void AddButtonTest_OpenSearchPage()
+        {
+            var locationWeatherListPage = new LocationWeatherListPage(DriverInstance);
+            locationWeatherListPage.ClickAddLocationButton();
+
+            SearchLocationListPage searchLocationPage = new SearchLocationListPage(DriverInstance);
+            Assert.IsTrue(searchLocationPage.IsOppened());
+
+        }
+        [Test]
+        public void AddButtonTest_ReternCitys()
         {
             var cityName = "Lviv";
 
             var locationWeatherListPage = new LocationWeatherListPage(DriverInstance);
-            //Assert.IsTrue(locationWeatherListPage.IsOppened());
+            locationWeatherListPage.ClickAddLocationButton();
 
-            var firstItem = locationWeatherListPage.ClickAddLocationButton()
-                .SetValueToSearch(cityName).ClickSearchButton()
+
+            SearchLocationListPage searchLocationPage = new SearchLocationListPage(DriverInstance);
+            var firstItem = searchLocationPage.SetValueToSearch(cityName).ClickSearchButton()
                 .GetSearchResultLocationNames().First();
 
             Assert.AreEqual(cityName, firstItem);

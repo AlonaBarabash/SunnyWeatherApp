@@ -22,10 +22,10 @@ namespace SunnyWeatherApp.UITest.PageObjects
             return RootElement.Displayed;
         }
 
-        public SearchLocationListPage ClickAddLocationButton()
+        public void ClickAddLocationButton()
         {
             AddLocation.Click();
-            return new SearchLocationListPage(DriverSession);
+
         }
 
         public IEnumerable<string> GetLocationsList()
